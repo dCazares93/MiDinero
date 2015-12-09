@@ -1,0 +1,29 @@
+﻿<div class="hpanel animated fadeIn" style="animation-delay: 0.1s">
+
+    <div class="panel-heading">
+        <h3>Task #{{pc.featureId}}</h3>
+    </div>
+
+    <div class="panel-body">
+        <div class="text-center">
+            <h4 style="padding-bottom: 5px;" class="font-bold text-success">{{pc.featureFormData.title}}</h4>
+        </div>
+        <p>{{pc.featureFormData.description}}</p>
+        <div class="pull-left">
+            <p class="pull-left"><strong>Priority Level: </strong></p>
+            <span style="padding-left: 5px;" class="pull-left ng-class:{ 'green' : pc.featureFormData.sortOrder.id === 1
+                                  ,'yellow' : pc.featureFormData.sortOrder.id === 2
+                                  ,'orange' : pc.featureFormData.sortOrder.id === 3
+                                  ,'red' : pc.featureFormData.sortOrder.id === 4 };">
+                {{pc.featureFormData.sortOrder.name}}
+            </span>
+        </div>
+
+        <div style="padding-top: 30px;">
+            <ul>
+                <li>Date Added: {{pc.featureFormData.dateAdded}}</li>
+                <li>Date Modified: {{pc.featureFormData.dateModified}}</li>
+            </ul>
+        </div>
+    </div>
+</div>

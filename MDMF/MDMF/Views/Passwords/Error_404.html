@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "Error_404";
+    Layout = "~/Views/Shared/_LayoutProject.cshtml";
+}
+
+@section Styles {
+<!--CSS Animation-->
+<link href="~/Vendor/animate.css/animate.css" rel="stylesheet" />
+<link href="~/Vendor/animate.css/animate.min.css" rel="stylesheet" />
+}
+
+<div class="main col-md-6 col-md-offset-3 pv-40">
+    <h1 class="page-title"><span class="text-default">404</span></h1>
+    <h2>Ooops! Page Not Found</h2>
+    <p>The page you're trying to reach is using an expired token. If you need to reset your password hit the reset password button. Thank you :)</p>
+    <a href="#" class="btn btn-default btn-animated btn-lg">Return Home <i class="fa fa-home"></i></a>
+    <a href="/account/Forgotpassword" class="btn btn-default btn-animated btn-lg">Reset Password<i class="fa fa-wrench"></i></a>
+</div>
+
+@section Scripts {
+
+<!-- Count To javascript -->
+<script src="~/Vendor/_Project/jquery.countTo.js"></script>
+
+<!-- Appear javascript -->
+<script src="~/Vendor/_Project/waypoints/jquery.waypoints.js"></script>
+
+<script type="text/javascript">
+
+        sabio.page.startUp = function () {
+            sabio.ui.layout.bgSplash2();
+
+            sabio.page.jumbo();
+        }
+
+        sabio.page.jumbo = function () {
+            $('.main-container').addClass('parallax jumbotron border-clear text-center margin-clear');
+        }
+
+</script>
+
+}

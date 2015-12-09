@@ -1,0 +1,19 @@
+﻿<div class="hpanel animated fadeIn" style="animation-delay: 0.1s">
+
+    <div class="panel-heading">
+        <h3>View Plan #{{pc.planId}}</h3>
+    </div>
+
+    <div class="panel-body">
+        <div>
+            <h2>{{pc.planFormData.name}}</h2>
+            <p data-ng-bind-html="pc.planFormData.description"></p>
+            <p>Cost: ${{pc.planFormData.cost}}</p>
+            <ul>
+                <li>Go Live Date: {{pc.planFormData.goLiveDate}}</li>
+                <li>Date Added: {{pc.planFormData.dateAdded}}</li>
+                <li>Last Updated: {{pc.planFormData.dateModified}}</li>
+            </ul>
+        </div>
+    </div>
+</div>

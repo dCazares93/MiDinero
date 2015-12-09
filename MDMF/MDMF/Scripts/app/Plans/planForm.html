@@ -1,0 +1,119 @@
+﻿<div class="hpanel animated fadeIn" style="animation-delay: 0.1s">
+
+    <div class="panel-body">
+
+        <form class="form-horizontal" name="pc.planForm" ng-submit="pc.savePlan()" novalidate>
+            <div class="form-group">
+                <h2>{{pc.header}}</h2>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-lg-2 control-label">Plan Name</label>
+                <div class="col-lg-10">
+                    <input type="text"
+                           class="form-control m-b ng-class:{'error': pc.formErrors && !pc.planForm.Name.$valid}"
+                           id="Name" name="Name"
+                           ng-model="pc.planFormData.name"
+                           ng-maxlength="50"
+                           required>
+                    <div role="alert" class="help-inline error">
+                        <span class="error" ng-show="pc.formErrors && pc.planForm.Name.$error.required">Plan name is required.</span>
+                        <span class="error" ng-show="pc.formErrors && pc.planForm.Name.$error.maxlength">Please make Plan Name shorter. 50 characters MAX</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-lg-2 control-label">Description</label>
+                <div class="col-lg-10">
+                    <textarea type="text"
+                              class="form-control m-b ng-class:{'error': pc.formErrors && !pc.planForm.Description.$valid}"
+                              id="Description" name="Description"
+                              style="resize:none" rows="5"
+                              ng-model="pc.planFormData.description"
+                              ng-bind-html="pc.myHTML"
+                              ng-minlength="6"
+                              required></textarea>
+                    <div role="alert" class="help-inline error">
+                        <span class="error" ng-show="pc.formErrors && pc.planForm.Description.$error.required">Description is required.</span>
+                        <span class="error" ng-show="pc.formErrors && pc.planForm.Description.$error.minlength">Please make Description longer. 6 characters MIN</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" ng-if="pc.typesDropDown">
+                <div class="hr-line-dashed"></div>
+                <label class="col-lg-2 control-label">Categories</label>
+                <div class="col-lg-10">
+                    <select class="form-control m-b ng-class:{'error': pc.formErrors && !pc.planForm.Types.$valid}"
+                            id="Types" name="Types"
+                            ng-model="pc.planFormData.type.id"
+                            required
+                            ng-options="item.id as item.name for item in pc.types">
+                        <option value="">Select Category</option>
+                    </select>
+                    <div role="alert" class="help-inline error">
+                        <span class="error" ng-show="pc.formErrors && pc.planForm.Types.$error.required">A Type is Required.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+
+            <div class="form-group hidden">
+                <label class="col-lg-2 control-label">Cost</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control m-b ng-class:{'error': pc.formErrors && !pc.planForm.Cost.$valid}"
+                           id="Cost" name="Cost"
+                           ng-model="pc.planFormData.cost"
+                           ng-init="pc.planFormData.cost = 0"
+                           required>
+                    <div role="alert" class="help-inline error">
+                        <span class="error" ng-show="pc.formErrors && pc.planForm.Cost.$error.type">Please Enter a Number.</span>
+                        <span class="error" ng-show="pc.formErrors && pc.planForm.Cost.$error.required">Cost is required.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hr-line-dashed hidden"></div>
+
+
+            <div class="form-group">
+                <label class="col-lg-2 control-label">Go Live Date</label>
+                <div class="col-lg-10">
+                    <input type="text"
+                           class="form-control m-b ng-class:{'error': pc.formErrors && !pc.planForm.goLiveDate.$valid}"
+                           id="Date" name="goLiveDate"
+                           ng-model="pc.planFormData.goLiveDate"
+                           required />
+                    <div role="alert" class="help-inline error">
+                        <span class="error" ng-show="pc.formErrors && pc.planForm.goLiveDate.$error.required">Date is required. Eg. 8/8/15</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-lg-2">Tag:</label>
+                <div class="col-lg-10">
+                    <input type="text"
+                           class="form-control m-b ng-class:{'error': pc.formErrors && !pc.planForm.tag.$valid}"
+                           id="Tag" name="tag"
+                           ng-model="pc.planFormData.tag"
+                           data-ng-pattern="/^[a-zA-Z0-9]{1,}[\s]*[a-zA-Z0-9]{1,}[\s]*[a-zA-Z0-9]{1,}[\s]*$/"
+                           ng-minlength="3"
+                           ng-maxlength="100" />
+                    <div role="alert" class="help-inline error">
+                        <span class="error" ng-show="pc.formErrors && pc.planForm.tag.$error.minlength">Minimum tag length is 3 characters</span>
+                        <span class="error" ng-show="pc.formErrors && pc.planForm.tag.$error.maxlength">Maximum tag length is 100 characters</span>
+                        <span class="error" ng-show="pc.formErrors && pc.planForm.tag.$error.pattern">Must begin with alphanumeric. Can only use alphanumeric characters and whitespace</span>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="hr-line-dashed"></div>
+            <button type="submit" class="pull-left btn btn-default btn-md saveButtons">Save</button>
+            <button type="button" style="margin-left:10px" class="pull-left btn btn-default btn-md deleteButtons" ng-if="pc.deleteButton" ng-click="pc.deletePlan()">Delete</button>
+        </form>
+
+    </div>
+</div>

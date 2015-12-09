@@ -1,0 +1,61 @@
+﻿<div class="hpanel animated fadeIn" style="animation-delay: 0.1s">
+
+    <div class="panel-body">
+
+        <form class="form-horizontal" name="pc.featureForm" ng-submit="pc.saveFeature()" novalidate>
+            <div class="form-group">
+                <h2>{{pc.header}}</h2>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-lg-2 control-label">Title</label>
+                <div class="col-lg-10">
+                    <input type="text"
+                           class="form-control m-b ng-class:{'error': pc.formErrors && !pc.featureForm.Title.$valid}"
+                           id="featureTitle" name="Title"
+                           ng-model="pc.featureFormData.title"
+                           required>
+                    <div role="alert" class="help-inline error">
+                        <span class="error" ng-show="pc.formErrors && pc.featureForm.Title.$error.required">Title is a required field.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-lg-2 control-label">Description</label>
+                <div class="col-lg-10">
+                    <div class="editable-input">
+                        <textarea class="form-control m-b ng-class:{'error': pc.formErrors && !pc.featureForm.Description.$valid}"
+                                  name="Description" id="featureDescription"
+                                  style="resize:none" rows="5"
+                                  ng-model="pc.featureFormData.description"
+                                  requred></textarea>
+                        <div role="alert" class="help-inline error">
+                            <span class="error" ng-show="pc.formErrors && pc.featureForm.Description.$error.required">Description is a required field.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-lg-2 control-label">Priority Level</label>
+                <div class="col-lg-10">
+                    <select class="form-control m-b ng-class:{'error': pc.formErrors && !pc.featureForm.SortOrder.$valid}"
+                            name="SortOrder" id="featureSortOrder"
+                            ng-model="pc.featureFormData.sortOrder.id"
+                            ng-options="item.id as item.name for item in pc.priorityLevels"
+                            required>
+                        <option value="">Select Priority</option>
+                    </select>
+                    <div role="alert" class="help-inline error">
+                        <span class="error" ng-show="pc.formErrors && pc.featureForm.SortOrder.$error.required">Sort order is a required field.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <button type="submit" class="pull-left btn btn-default btn-md saveButtons">Save</button>
+            <button type="button" style="margin-left:10px" class="pull-left btn btn-default btn-md deleteButtons" ng-if="pc.deleteButton" ng-click="pc.deleteFeature()">Delete</button>
+        </form>
+
+    </div>
+</div>

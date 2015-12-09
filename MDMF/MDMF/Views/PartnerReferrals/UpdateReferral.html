@@ -1,0 +1,241 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<int>
+
+    @{
+    ViewBag.Title = "UpdateReferral";
+    Layout = "~/Views/Shared/_LayoutHomer.cshtml";
+    }
+
+    <h2>Update Referral</h2>
+
+    <div class="row-fluid">
+        <div class="col-lg-8">
+            <div class="hpanel">
+                <div class="panel-heading">
+                    Editor
+                </div>
+                <div class="panel-body">
+                    <form method="get" class="form-horizontal referralForm" role="form">
+                        <div class="form-group">
+                            <label for=" ddmenu" class="col-sm-2 control-label">
+                                Partner Type:
+                            </label>
+                            <div class="col-sm-4">
+                                <select class="form-control" id="ddMenu" name="PartnerType">
+                                    <option value="">Select Type</option>
+                                    <option value="1">Type one</option>
+                                    <option value="2">Type two</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="pName" class="col-sm-2 control-label">Partner Name:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="pName" name="PartnerName" value="">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="pDesc" class="col-sm-2 control-label">Description:</label>
+                            <div class="col-sm-10">
+                                <textarea type="text" style="resize:none" class="form-control" rows="7" id="pDesc" name="Description"></textarea>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="pUrl" class="col-sm-2 control-label">URL:</label>
+                            <div class="col-sm-10">
+                                <input type="url" class="form-control" id="pUrl" name="URL">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="AC" class="col-sm-2 control-label">Affiliate Code:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="AC" name="AffiliateCode">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <a href="/Partner/" class="btn btn-primary">Back</a>
+                                <button class="btn btn-default" type="submit" id="formClear" style="margin-left:10px">Clear</button>
+                                <button class="btn btn-primary" style="margin-left:10px" type="submit" id="formSave">Save</button>
+                            </div>
+                        </div>
+                        <input type="hidden" class="form-control" name="id" id="referralId" value="@Model.Item" />
+                    </form>
+                </div>
+            </div>
+            <div class="alert " id="msgWindow"></div>
+        </div>
+
+    </div>
+
+    @section Scripts {
+
+    <script src="~/Scripts/sabio/sabio.services.PartnerReferral.js"></script>
+    <script type="text/javascript">
+
+        sabio.page.startUp = function () {
+
+            sabio.page.initializeValidation();
+
+            sabio.page.referralNumber();
+
+            sabio.page.getReferral();
+
+        };
+
+        sabio.page.initializeValidation = function () {
+            //  set defaults for the entire plugin
+            jQuery.validator.setDefaults({
+                debug: true
+            });
+
+            //  set rules and error messages
+            $('.referralForm').validate({
+                rules: {
+                    "PartnerType": {
+                        required: true  // A partner type is required
+                    },
+                    "PartnerName": {
+                        required: true  // A partner name is required
+                    },
+                    "Description": {
+                        required: true  // A Description is required
+                    },
+                    "URL": {
+                        required: true  // A URL is required
+                    },
+                    "AffiliateCode": {
+                        required: true  // An affiliate code is required
+                    }
+                },
+                //  here you can provide custom error messages if you want to - this part is optional
+                messages: {
+                    "PartnerType": {
+                        required: "Please select partner type."
+                    },
+                    "PartnerName": {
+                        required: "The partner name is required."
+                    },
+                    "Description": {
+                        required: "A brief description is required."
+                    },
+                    "URL": {
+                        required: "Your URL must be a valid http:// address."
+                    },
+                    "AffiliateCode": {
+                        required: "An affiliate code is required."
+                    }
+                }
+            });
+        };
+
+        sabio.page.referralNumber = function () {
+            sabio.page.id = $('#referralId').val()
+            console.log(sabio.page.id);
+        }
+
+        sabio.page.getReferral = function () {
+            sabio.services.referral.selectById(sabio.page.id, onSuccess, onError);
+        }
+
+        function onSuccess(data, status, xhr) {
+            console.log("Ajax success");
+            console.log(data);
+            sabio.page.referralData = data;
+            sabio.page.postReferral(sabio.page.referralData);
+        }
+
+        function onError(jqXHR, textStatus, errorThrown) {
+            console.log("Ajax error");
+            console.log(jqXHR.responseJSON);
+        }
+
+        sabio.page.postReferral = function (referralObject) {
+            var pReferral = referralObject.item;
+            var referralForm = $($('.referralForm').html());
+
+            var partnerType = pReferral['partnerType'];
+            var partnerName = pReferral['partnerName'];
+            var partnerDescription = pReferral['description'];
+            var url = pReferral['url'];
+            var affiliateCode = pReferral['affiliateCode'];
+            var id = pReferral['id'];
+
+            referralForm.find('#ddMenu').val(partnerType);
+            referralForm.find('#pName').val(partnerName);
+            referralForm.find('#pDesc').val(partnerDescription);
+            referralForm.find('#pUrl').val(url);
+            referralForm.find('#AC').val(affiliateCode);
+
+            $('.referralForm').html(referralForm);
+
+            $("#formSave").on("click", sabio.page.handlers.onFormSubmit);
+
+            $("#formClear").on("click", sabio.page.handlers.resetForm);
+        }
+
+        sabio.page.handlers.onFormSubmit = function () {
+
+            if ($('.referralForm').valid()) {
+                sabio.services.referral.update(sabio.page.id);
+            }
+            else {
+            }
+        };
+
+        function onUpdateSuccess(data, status, xhr) {
+            console.log(JSON.stringify(data));
+            $("#msgWindow").removeClass("alert-danger");
+            $("#msgWindow").addClass("alert-info");
+            $("#msgWindow").html((JSON.stringify(data)));
+
+            window.setTimeout(function () {
+                window.location.href = "/Partner/";
+            }, 500);
+
+        }
+
+        function onUpdateError(data, jqXHR, textStatus, errorThrown) {
+            console.log(JSON.stringify(data));
+            $("#msgWindow").addClass("alert-danger");
+            $("#msgWindow").removeClass("alert-info");
+            $("#msgWindow").html((JSON.stringify(data)));
+        }
+
+        sabio.page.handlers.resetForm = function (evnt) {
+            evnt.preventDefault();
+            $('form')[1].reset();
+        }
+
+    </script>
+    }
+
+    @section Styles {
+
+    <style type="text/css">
+        .form-control:focus {
+            border-color: rgba(103, 243, 43, 0.48) !important;
+            box-shadow: rgba(103, 243, 43, 0.48) 0 0 10px !important;
+        }
+
+        .form-control.error {
+            border-color: #E74C3C !important;
+            box-shadow: #E74C3C 0 0 10px !important;
+        }
+
+        .btn-primary {
+            color: #ffffff;
+            background-color: rgb(54, 195, 33) !important;
+            border-color: rgb(54, 195, 33) !important;
+        }
+
+            .btn-primary:hover {
+                background-color: rgba(46, 221, 19, 0.73) !important;
+                border-color: rgba(46, 221, 19, 0.73) !important;
+                color: #ffffff;
+            }
+    </style>
+    }

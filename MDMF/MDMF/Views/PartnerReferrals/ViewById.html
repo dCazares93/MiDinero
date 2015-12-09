@@ -1,0 +1,151 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<int>
+
+    @{
+    ViewBag.Title = "ViewById";
+    Layout = "~/Views/Shared/_LayoutHomer.cshtml";
+    }
+
+    <h2>Referral Details</h2>
+
+
+    <div class="content">
+        <input type="hidden" id="id" value="@Model.Item" />
+        <div class="row referralSpace">
+
+        </div>
+    </div>
+
+
+    <script type="text/template" id="Template">
+        <div class=" col-lg-4">
+            <div class="hpanel hgreen contact-panel">
+                <div class="panel-body">
+                    <a class="label label-success pull-right" id="update" href="">Edit</a> <br />
+                    <a class="label label-success pull-right" id="delete">Delete</a>
+                    <div>
+                        <h3 class="pName"></h3>
+                    </div>
+                    <div class="text-muted font-bold m-b-xs pType"></div>
+                    <div>
+                        <p class="pDescription"></p>
+                        <p class="aCode"><strong></strong></p>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <div>
+                        <a href="" class="url"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+
+    @section Scripts {
+
+    <script src="~/Scripts/sabio/sabio.services.PartnerReferral.js"></script>
+    <script type="text/javascript">
+
+    sabio.page.startUp = function () {
+        sabio.page.referralNumber();
+        sabio.page.getReferral();
+    }
+
+    sabio.page.referralNumber = function () {
+        sabio.page.id = $('#id').val()
+        console.log(sabio.page.id);
+    }
+
+    sabio.page.getReferral = function () {
+        sabio.services.referral.selectById(sabio.page.id, onSuccess, onError);
+    }
+
+    function onSuccess(data, status, xhr) {
+        console.log("Get success");
+        console.log(data);
+        sabio.page.referralData = data;
+        sabio.page.postReferral(sabio.page.referralData);
+    }
+
+    function onError(jqXHR, textStatus, errorThrown) {
+        console.log("Get error");
+        console.log(jqXHR.responseJSON);
+    }
+
+    sabio.page.postReferral = function (referralObject) {
+        var pReferral = referralObject.item;
+        var referralCard = $($('#Template').html());
+
+        var partnerType = pReferral['partnerType'];
+        var partnerName = pReferral['partnerName'];
+        var partnerDescription = pReferral['description'];
+        var url = pReferral['url'];
+        var affiliateCode = pReferral['affiliateCode'];
+        var id = pReferral['id'];
+
+        referralCard.find('.pType').html(partnerType);
+        referralCard.find('.pName').html(partnerName);
+        referralCard.find('.pDescription').html(partnerDescription);
+        referralCard.find('.url').html(url);
+        referralCard.find('.url').attr('href', url);
+        referralCard.find('.aCode').html(affiliateCode);
+        referralCard.find('#update').attr('href', '/Partner/update/' + id);
+
+        $('.referralSpace').append(referralCard);
+
+        $('#delete').on('click', sabio.page.handlers.deleteAlert);
+    }
+
+    sabio.page.handlers.deleteAlert = function (evt) {
+        evt.preventDefault();
+        console.log("deleteAlert fired");
+
+        swal({
+            title: "Are you sure?",
+            text: "Your will not be able to recover this referral!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        sabio.services.referral.delete(sabio.page.id, onDeleteSuccess, onDeleteError);
+                        swal("Deleted!", "Your profile has been deleted. You will be redirected to the referrals page in 3 seconds.", "success");
+
+                        window.setTimeout(function () {
+                            window.location.href = "/Partner/";
+                        }, 3000);
+
+                    } else {
+                        swal("Cancelled", "error");
+                    }
+                });
+    }
+
+    function onDeleteSuccess(data, status, xhr) {
+        console.log("Delete success");
+        console.log(data);
+    }
+
+    function onDeleteError(jqXHR, textStatus, errorThrown) {
+        console.log("Delete error");
+        console.log(jqXHR.responseJSON);
+    }
+
+    </script>
+
+    }
+
+    @section Styles {
+
+    <style type="text/css">
+        #delete {
+            background-color: #E74C3C !important;
+        }
+    </style>
+    }
+
